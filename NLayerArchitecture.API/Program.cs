@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using NLayerArchitecture.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<NLayerArchitectureDbContext>(options =>
+{
+    var connectionStrings = builder.Configuration.GetSection(ConnectionStringOption.Key).Get<ConnectionStringOption>();
+    options.UseSqlServer(connectionStrings!.SqlServer);
+});
 
 var app = builder.Build();
 
