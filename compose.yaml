@@ -1,0 +1,7 @@
+﻿services:
+  nlayerarchitecture.api:
+    image: nlayerarchitecture.api
+    build:
+      context: .
+      dockerfile: NLayerArchitecture.API/Dockerfile
+
