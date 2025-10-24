@@ -1,5 +1,68 @@
+# Build output
 bin/
 obj/
-/packages/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.iml
 riderModule.iml
-/_ReSharper.Caches/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+*.iws
+*.ipr
+
+# ReSharper
+_ReSharper.Caches/
+*.DotSettings.user
+
+# NuGet
+packages/
+*.nupkg
+packages.lock.json
+
+# Publish / deployment
+publish/
+out/
+dist/
+
+# ASP.NET / app secrets / local settings
+local.settings.json
+secrets.json
+appsettings.*.Local.json
+
+# Test results / coverage
+TestResults/
+testresults/
+*.trx
+*.coverage
+coverage/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Rider / IDE project files
+*.sln.iml
+
+# Misc
+*.pid
+*.seed
+*.db
+*.sqlite
+
+# Ignore user-specific Visual Studio Code files
+.history/
