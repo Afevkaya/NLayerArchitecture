@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NLayerArchitecture.Repositories.Products;
 
 namespace NLayerArchitecture.Repositories.Extensions;
 
@@ -16,7 +17,11 @@ public static class RepositoryExtension
                 sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName);
             });
         });
+
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IProductRepository, ProductRepository>();
         
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NLayerArchitecture.Repositories.Products;
 
 namespace NLayerArchitecture.Repositories;
 

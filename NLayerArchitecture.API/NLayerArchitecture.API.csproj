@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NLayerArhitecture.Services\NLayerArhitecture.Services.csproj" />
+      <ProjectReference Include="..\NLayerArchitecture.Services\NLayerArchitecture.Services.csproj" />
     </ItemGroup>
 
 </Project>

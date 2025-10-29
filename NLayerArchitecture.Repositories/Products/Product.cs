@@ -1,4 +1,4 @@
-namespace NLayerArchitecture.Repositories;
+namespace NLayerArchitecture.Repositories.Products;
 
 public class Product
 {
