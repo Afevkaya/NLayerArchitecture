@@ -73,6 +73,16 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         productRepository.Delete(product);
         await unitOfWork.SaveChangesAsync();
 
-        return ServiceResult.Success();
+        return ServiceResult.Success(HttpStatusCode.NoContent);
+    }
+
+    public async Task<ServiceResult<List<ProductDto>>> PaginationAsync(int page, int pageSize)
+    {
+        var paginationData = await productRepository.PaginationAsync(page, pageSize);
+        if (paginationData.Count == 0)
+            return ServiceResult<List<ProductDto>>.Failed("No products found for the given page and page size", HttpStatusCode.NotFound);
+        
+        var productDto = paginationData.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.Stock)).ToList();
+        return ServiceResult<List<ProductDto>>.Success(productDto);
     }
 }

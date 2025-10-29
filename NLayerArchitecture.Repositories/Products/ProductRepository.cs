@@ -11,4 +11,12 @@ public class ProductRepository(NLayerArchitectureDbContext dbContext) : GenericR
             .Take(count)
             .ToListAsync();
     }
+
+    public Task<List<Product>> PaginationAsync(int page, int pageSize)
+    {
+        return GetAll()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
 }
