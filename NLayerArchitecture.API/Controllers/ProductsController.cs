@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NLayerArchitecture.Services.Products;
+using NLayerArchitecture.Services.Products.Create;
+using NLayerArchitecture.Services.Products.Update;
 
 namespace NLayerArchitecture.API.Controllers;
 

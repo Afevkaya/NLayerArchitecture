@@ -1,3 +1,6 @@
+using NLayerArchitecture.Services.Products.Create;
+using NLayerArchitecture.Services.Products.Update;
+
 namespace NLayerArchitecture.Services.Products;
 
 public interface IProductService

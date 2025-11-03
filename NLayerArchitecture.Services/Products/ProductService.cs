@@ -1,16 +1,19 @@
 using System.Net;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NLayerArchitecture.Repositories;
 using NLayerArchitecture.Repositories.Products;
+using NLayerArchitecture.Services.Products.Create;
+using NLayerArchitecture.Services.Products.Update;
 
 namespace NLayerArchitecture.Services.Products;
 
-public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork):IProductService
+public class ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork,IMapper mapper):IProductService
 {
     public async Task<ServiceResult<List<ProductDto>>> GetAllAsync()
     {
         var products = await productRepository.GetAll().ToListAsync();
-        var productDto = products.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.Stock)).ToList();
+        var productDto = products.Select(mapper.Map<ProductDto>).ToList();
         return ServiceResult<List<ProductDto>>.Success(productDto);
     }
     public async Task<ServiceResult<ProductDto>> GetByIdAsync(Guid id)
@@ -19,14 +22,14 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         if (product == null)
             return ServiceResult<ProductDto>.Failed("Product is not found", HttpStatusCode.NotFound);
         
-        var productDto = new ProductDto(product.Id, product.Name, product.Price, product.Stock);
+        var productDto = mapper.Map<ProductDto>(product);
         return ServiceResult<ProductDto>.Success(productDto);
     }
     public async Task<ServiceResult<List<ProductDto>>> GetTopPriceProductAsync(int count)
     {
         var products = await productRepository.GetTopPriceProductAsync(count);
 
-        var productDto = products.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.Stock)).ToList();
+        var productDto = products.Select(mapper.Map<ProductDto>).ToList();
 
         return ServiceResult<List<ProductDto>>.Success(productDto);
     }
@@ -36,13 +39,14 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         if (anyProduct)
             return ServiceResult<CreateProductResponse>.Failed("Ürün ismi bulunaktadır", HttpStatusCode.BadRequest);
         
-        var product = new Product
-        {
-            Id = Guid.NewGuid(),
-            Name = request.Name,
-            Price = request.Price,
-            Stock = request.Stock
-        };
+        // var product = new Product
+        // {
+        //     Id = Guid.NewGuid(),
+        //     Name = request.Name,
+        //     Price = request.Price,
+        //     Stock = request.Stock
+        // };
+        var product = mapper.Map<Product>(request);
         await productRepository.AddAsync(product) ;
         var result = await unitOfWork.SaveChangesAsync();
         return result > 0 
@@ -60,15 +64,14 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         
         product.Name = request.Name;
         product.Price = request.Price;
-        product.Stock = request.Stock;
+        product.Stock = request.Stock; 
+       mapper.Map(request,product);
         
         productRepository.Update(product);
         await unitOfWork.SaveChangesAsync();
         
         return ServiceResult<UpdateProductResponse>.Success(new UpdateProductResponse(product.Id));
     }
-    
-    
     public async Task<ServiceResult<UpdateProductResponse>> UpdateStockAsync(UpdateProductStockRequest request)
     {
         if(request.Id == Guid.Empty)
@@ -106,7 +109,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         if (paginationData.Count == 0)
             return ServiceResult<List<ProductDto>>.Failed("No products found for the given page and page size", HttpStatusCode.NotFound);
         
-        var productDto = paginationData.Select(p => new ProductDto(p.Id, p.Name, p.Price, p.Stock)).ToList();
+        var productDto = paginationData.Select(mapper.Map<ProductDto>).ToList();
         return ServiceResult<List<ProductDto>>.Success(productDto);
     }
 }
