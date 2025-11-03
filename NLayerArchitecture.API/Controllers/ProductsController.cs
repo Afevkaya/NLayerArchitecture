@@ -8,11 +8,11 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     [HttpGet]
     public async Task<IActionResult> GetAllAsync() => CreateActionResult(await productService.GetAllAsync());
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdAsync(Guid id) => CreateActionResult(await productService.GetByIdAsync(id));
     
-    [HttpGet("top-price-product/{count}")]
-    public async Task<IActionResult> GetTopPriceProductAsync(int count, int page) => CreateActionResult(await productService.GetTopPriceProductAsync(count));
+    [HttpGet("top-price-product/{count:int}")]
+    public async Task<IActionResult> GetTopPriceProductAsync(int count) => CreateActionResult(await productService.GetTopPriceProductAsync(count));
     
     [HttpGet("pagination/{page:int}/{pageSize:int}")]
     public async Task<IActionResult> PaginationAsync(int page, int pageSize) => CreateActionResult(await productService.PaginationAsync(page, pageSize));
@@ -23,6 +23,9 @@ public class ProductsController(IProductService productService) : CustomBaseCont
     [HttpPut]
     public async Task<IActionResult> UpdateAsync(UpdateProductRequest request) => CreateActionResult(await productService.UpdateAsync(request));
     
-    [HttpDelete("{id}")]
+    [HttpPatch("stock")]
+    public async Task<IActionResult> PatchAsync(UpdateProductStockRequest request) => CreateActionResult(await productService.UpdateStockAsync(request));
+    
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteAsync(Guid id) => CreateActionResult(await productService.DeleteAsync(id));
 }

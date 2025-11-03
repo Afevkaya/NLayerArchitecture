@@ -11,10 +11,15 @@ public class ServiceResult<T>
     [JsonIgnore] public bool IsSuccess => ErrorMessages == null || ErrorMessages.Count == 0;
     [JsonIgnore] public bool IsFailed => !IsSuccess;
     [JsonIgnore] public HttpStatusCode? StatusCode { get; set; }
+    [JsonIgnore] public string? UrlAsCreated { get; set; }
 
     public static ServiceResult<T> Success(T data, HttpStatusCode statusCode = HttpStatusCode.OK)
     {
         return new ServiceResult<T> { Data = data, StatusCode = statusCode };
+    }
+    public static ServiceResult<T> SuccessAsCreated(T data, string urlAsCreated)
+    {
+        return new ServiceResult<T> { Data = data, UrlAsCreated = urlAsCreated, StatusCode = HttpStatusCode.Created };
     }
     
     public static ServiceResult<T> Failed(List<string> errorMessages, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
@@ -34,7 +39,7 @@ public class ServiceResult
     [JsonIgnore] public bool IsSuccess => ErrorMessages == null || ErrorMessages.Count == 0;
     [JsonIgnore] public bool IsFailed => !IsSuccess;
     [JsonIgnore] public HttpStatusCode? StatusCode { get; set; }
-
+    
     public static ServiceResult Success(HttpStatusCode statusCode = HttpStatusCode.OK)
     {
         return new ServiceResult{ StatusCode = statusCode };

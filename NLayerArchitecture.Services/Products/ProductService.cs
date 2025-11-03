@@ -32,6 +32,10 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
     }
     public async Task<ServiceResult<CreateProductResponse>> AddAsync(CreateProductRequest request)
     {
+        var anyProduct = await productRepository.Where(p=>p.Name == request.Name).AnyAsync();
+        if (anyProduct)
+            return ServiceResult<CreateProductResponse>.Failed("Ürün ismi bulunaktadır", HttpStatusCode.BadRequest);
+        
         var product = new Product
         {
             Id = Guid.NewGuid(),
@@ -41,7 +45,9 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         };
         await productRepository.AddAsync(product) ;
         var result = await unitOfWork.SaveChangesAsync();
-        return result > 0 ? ServiceResult<CreateProductResponse>.Success(new CreateProductResponse(product.Id)) : ServiceResult<CreateProductResponse>.Failed("Product is not added");
+        return result > 0 
+            ? ServiceResult<CreateProductResponse>.SuccessAsCreated(new CreateProductResponse(product.Id),$"api/products/{product.Id}") 
+            : ServiceResult<CreateProductResponse>.Failed("Product is not added");
     }
     public async Task<ServiceResult<UpdateProductResponse>> UpdateAsync(UpdateProductRequest request)
     {
@@ -54,6 +60,24 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         
         product.Name = request.Name;
         product.Price = request.Price;
+        product.Stock = request.Stock;
+        
+        productRepository.Update(product);
+        await unitOfWork.SaveChangesAsync();
+        
+        return ServiceResult<UpdateProductResponse>.Success(new UpdateProductResponse(product.Id));
+    }
+    
+    
+    public async Task<ServiceResult<UpdateProductResponse>> UpdateStockAsync(UpdateProductStockRequest request)
+    {
+        if(request.Id == Guid.Empty)
+            return ServiceResult<UpdateProductResponse>.Failed("Product Id is required");
+        
+        var product = await productRepository.GetByIdAsync(request.Id);
+        if (product == null)
+            return ServiceResult<UpdateProductResponse>.Failed("Product is not found",HttpStatusCode.NotFound);
+        
         product.Stock = request.Stock;
         
         productRepository.Update(product);
