@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using NLayerArchitecture.Services.ExceptionHandlers;
 using NLayerArchitecture.Services.Products;
 using NLayerArchitecture.Services.Products.Create;
 
@@ -16,6 +17,8 @@ public static class ServiceExtension
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<CreateProductRequestValidator>();
         services.AddAutoMapper(cfg => { }, typeof(ServiceAssembly).Assembly);
+        services.AddExceptionHandler<CriticalExceptionHandler>();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
         return services;
     }
 }

@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NLayerArchitecture.Repositories;
 using NLayerArchitecture.Repositories.Products;
+using NLayerArchitecture.Services.ExceptionHandlers;
 using NLayerArchitecture.Services.Products.Create;
 using NLayerArchitecture.Services.Products.Update;
 
@@ -35,17 +36,12 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
     }
     public async Task<ServiceResult<CreateProductResponse>> AddAsync(CreateProductRequest request)
     {
+        // Manuel Exception
+        // throw new CriticalException("Kritik hata");
         var anyProduct = await productRepository.Where(p=>p.Name == request.Name).AnyAsync();
         if (anyProduct)
             return ServiceResult<CreateProductResponse>.Failed("Ürün ismi bulunaktadır", HttpStatusCode.BadRequest);
         
-        // var product = new Product
-        // {
-        //     Id = Guid.NewGuid(),
-        //     Name = request.Name,
-        //     Price = request.Price,
-        //     Stock = request.Stock
-        // };
         var product = mapper.Map<Product>(request);
         await productRepository.AddAsync(product) ;
         var result = await unitOfWork.SaveChangesAsync();
@@ -62,10 +58,7 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
         if (product == null)
             return ServiceResult<UpdateProductResponse>.Failed("Product is not found",HttpStatusCode.NotFound);
         
-        product.Name = request.Name;
-        product.Price = request.Price;
-        product.Stock = request.Stock; 
-       mapper.Map(request,product);
+        mapper.Map(request,product);
         
         productRepository.Update(product);
         await unitOfWork.SaveChangesAsync();
