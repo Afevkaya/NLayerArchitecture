@@ -1,5 +1,6 @@
 using NLayerArchitecture.Services.Products.Create;
 using NLayerArchitecture.Services.Products.Update;
+using NLayerArchitecture.Services.Products.UpdateStock;
 
 namespace NLayerArchitecture.Services.Products;
 

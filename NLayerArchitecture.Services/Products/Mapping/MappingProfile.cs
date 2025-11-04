@@ -10,7 +10,10 @@ public class MappingProfile:Profile
     public MappingProfile()
     {
         CreateMap<Product, ProductDto>();
-        CreateMap<CreateProductRequest, Product>();
-        CreateMap<UpdateProductRequest, Product>();
+        CreateMap<CreateProductRequest, Product>()
+            .ForMember(dest=>dest.Name,
+                opt=>opt.MapFrom(src=>src.Name.ToLowerInvariant()));
+        CreateMap<UpdateProductRequest, Product>().ForMember(dest=>dest.Name,
+            opt=>opt.MapFrom(src=>src.Name.ToLowerInvariant()));
     }
 }
