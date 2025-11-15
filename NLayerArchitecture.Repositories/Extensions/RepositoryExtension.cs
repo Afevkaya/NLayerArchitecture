@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLayerArchitecture.Repositories.Categories;
+using NLayerArchitecture.Repositories.Interceptors;
 using NLayerArchitecture.Repositories.Products;
 
 namespace NLayerArchitecture.Repositories.Extensions;
@@ -17,6 +18,7 @@ public static class RepositoryExtension
             {
                 sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName);
             });
+            options.AddInterceptors(new AuditDbContextInterceptor());
         });
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

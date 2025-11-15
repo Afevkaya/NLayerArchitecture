@@ -1,3 +1,3 @@
 namespace NLayerArchitecture.Services.Products.Update;
 
-public record UpdateProductRequest(Guid Id, string Name, decimal Price, int Stock, Guid CategoryId);
+public record UpdateProductRequest(Guid Id, string Name, decimal Price, int Stock);
