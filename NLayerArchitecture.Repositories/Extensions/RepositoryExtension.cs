@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NLayerArchitecture.Repositories.Categories;
 using NLayerArchitecture.Repositories.Products;
 
 namespace NLayerArchitecture.Repositories.Extensions;
@@ -20,6 +21,7 @@ public static class RepositoryExtension
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;

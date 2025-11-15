@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NLayerArchitecture.Repositories;
 
 #nullable disable
 
-namespace NLayerArhitecture.Repositories.Migrations
+namespace NLayerArchitecture.Repositories.Migrations
 {
     [DbContext(typeof(NLayerArchitectureDbContext))]
-    partial class NLayerArchitectureDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251115105504_CreateCategory")]
+    partial class CreateCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

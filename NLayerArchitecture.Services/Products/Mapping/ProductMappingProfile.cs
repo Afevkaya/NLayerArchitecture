@@ -5,9 +5,9 @@ using NLayerArchitecture.Services.Products.Update;
 
 namespace NLayerArchitecture.Services.Products.Mapping;
 
-public class MappingProfile:Profile
+public class ProductMappingProfile:Profile
 {
-    public MappingProfile()
+    public ProductMappingProfile()
     {
         CreateMap<Product, ProductDto>();
         CreateMap<CreateProductRequest, Product>()

@@ -20,5 +20,6 @@ public class UpdateProductRequestValidator: AbstractValidator<UpdateProductReque
         RuleFor(p=>p.Stock)
             .InclusiveBetween(1,100)
             .WithMessage("Ürün adedi 1 ile 100 arasında olmalıdır");
+        RuleFor(p=>p.CategoryId).NotEmpty().WithMessage("Kategori Id zorunludur");
     }
 }
