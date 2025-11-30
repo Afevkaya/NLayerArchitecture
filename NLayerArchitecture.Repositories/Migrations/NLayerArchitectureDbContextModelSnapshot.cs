@@ -8,7 +8,7 @@ using NLayerArchitecture.Repositories;
 
 #nullable disable
 
-namespace NLayerArhitecture.Repositories.Migrations
+namespace NLayerArchitecture.Repositories.Migrations
 {
     [DbContext(typeof(NLayerArchitectureDbContext))]
     partial class NLayerArchitectureDbContextModelSnapshot : ModelSnapshot

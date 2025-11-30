@@ -12,8 +12,8 @@ using NLayerArchitecture.Repositories;
 namespace NLayerArchitecture.Repositories.Migrations
 {
     [DbContext(typeof(NLayerArchitectureDbContext))]
-    [Migration("20251115123900_AddAuditEntity")]
-    partial class AddAuditEntity
+    [Migration("20251122151144_NewDatabases")]
+    partial class NewDatabases
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
