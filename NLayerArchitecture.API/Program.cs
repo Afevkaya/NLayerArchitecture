@@ -11,10 +11,6 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<FluentValidationFilter>();
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
