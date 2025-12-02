@@ -6,9 +6,6 @@ public class UpdateProductRequestValidator: AbstractValidator<UpdateProductReque
 {
     public UpdateProductRequestValidator()
     {
-        RuleFor(p=>p.Id)
-            .NotEmpty()
-            .WithMessage("Id zorunludur");
         RuleFor(p=>p.Name)
             .NotEmpty()
             .WithMessage("Ürün ismi zorunludur")

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NLayerArchitecture.Repositories.Categories;
 
-public class CategoryRepository(NLayerArchitectureDbContext dbContext) :GenericRepository<Category>(dbContext), ICategoryRepository
+public class CategoryRepository(NLayerArchitectureDbContext dbContext) :GenericRepository<Category,Guid>(dbContext), ICategoryRepository
 {
     public Task<Category?> GetCategoryWithProductsAsync(Guid id)
     {

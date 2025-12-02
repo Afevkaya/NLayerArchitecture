@@ -62,20 +62,17 @@ public class CategoryService(ICategoryRepository categoryRepository, IMapper map
             ? ServiceResult<CreateCategoryResponse>.Failed("Kategori eklenemedi",HttpStatusCode.InternalServerError) 
             : ServiceResult<CreateCategoryResponse>.SuccessAsCreated(new CreateCategoryResponse(category.Id),$"api/categories/{category.Id}");
     }
-    public async Task<ServiceResult<UpdateCategoryResponse>> UpdateAsync(UpdateCategoryRequest request)
+    public async Task<ServiceResult<UpdateCategoryResponse>> UpdateAsync(Guid id, UpdateCategoryRequest request)
     {
         if (request is null)
             ServiceResult<UpdateCategoryResponse>.Failed("Model hatalı");
         
-        var category = await categoryRepository.GetByIdAsync(request!.Id);
-        if(category == null)
-            ServiceResult<UpdateCategoryResponse>.Failed("Güncellenmek istenen kategori bulunamadı",HttpStatusCode.NotFound);
-        
-        var isCategoryNameExist = await categoryRepository.Where(c=>c.Name == request.Name && c.Id != request.Id).AnyAsync();
+        var isCategoryNameExist = await categoryRepository.Where(c=>c.Name == request!.Name && c.Id != id).AnyAsync();
         if (isCategoryNameExist)
             return ServiceResult<UpdateCategoryResponse>.Failed("Kategori ismi zaten mevcut",HttpStatusCode.BadRequest);
         
-        mapper.Map(request,category);
+        var category = mapper.Map<Category>(request);
+        category.Id = id;
         await unitOfWork.SaveChangesAsync();
         return ServiceResult<UpdateCategoryResponse>.Success(new UpdateCategoryResponse(category!.Id));
     }
@@ -85,8 +82,6 @@ public class CategoryService(ICategoryRepository categoryRepository, IMapper map
             ServiceResult.Failed("Id hatalı");
 
         var category = await categoryRepository.GetByIdAsync(id);
-        if(category is null)
-            ServiceResult.Failed("Silinmek istenen kategori bulunamadı",HttpStatusCode.NotFound);
         
         categoryRepository.Delete(category!);
         await unitOfWork.SaveChangesAsync();

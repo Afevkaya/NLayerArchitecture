@@ -50,23 +50,20 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
             ? ServiceResult<CreateProductResponse>.SuccessAsCreated(new CreateProductResponse(product.Id),$"api/products/{product.Id}") 
             : ServiceResult<CreateProductResponse>.Failed("Ürün eklenemedi");
     }
-    public async Task<ServiceResult<UpdateProductResponse>> UpdateAsync(UpdateProductRequest request)
+    public async Task<ServiceResult<UpdateProductResponse>> UpdateAsync(Guid id, UpdateProductRequest request)
     {
-        if(request.Id == Guid.Empty)
+        if(id == Guid.Empty)
             return ServiceResult<UpdateProductResponse>.Failed("Ürün Id zorunludur");
         
         var isProductNameExist = await productRepository
-            .Where(p=>p.Name == request.Name && p.Id != request.Id)
+            .Where(p=>p.Name == request.Name && p.Id != id)
             .AnyAsync();
         
         if (isProductNameExist)
             return ServiceResult<UpdateProductResponse>.Failed("Ürün ismi bulunmaktadır", HttpStatusCode.BadRequest);
         
-        var product = await productRepository.GetByIdAsync(request.Id);
-        if (product == null)
-            return ServiceResult<UpdateProductResponse>.Failed("Ürün bulunamadı",HttpStatusCode.NotFound);
-        
-        mapper.Map(request,product);
+        var product = mapper.Map<Product>(request);
+        product.Id = id;
         
         productRepository.Update(product);
         await unitOfWork.SaveChangesAsync();
@@ -91,14 +88,8 @@ public class ProductService(IProductRepository productRepository, IUnitOfWork un
     }
     public async Task<ServiceResult> DeleteAsync(Guid id)
     {
-        // Fast Fail
-        // Guard Clauses
-        
         var product = await productRepository.GetByIdAsync(id);
-        if (product == null)
-            return ServiceResult.Failed("Ürün bulunamadı", HttpStatusCode.NotFound);
-        
-        productRepository.Delete(product);
+        productRepository.Delete(product!);
         await unitOfWork.SaveChangesAsync();
 
         return ServiceResult.Success(HttpStatusCode.NoContent);

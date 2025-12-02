@@ -30,6 +30,9 @@ public class AuditDbContextInterceptor : SaveChangesInterceptor
         {
             if(entityEntry.Entity is not IAuditEntity auditEntity) continue;
 
+            #region Yöntemler
+
+            /*
             switch (entityEntry.State)
             {
                 #region 1.yol
@@ -42,7 +45,7 @@ public class AuditDbContextInterceptor : SaveChangesInterceptor
                 //     eventData.Context.Entry(auditEntity).Property(x => x.CreatedDate).IsModified = false;
                 //     break;
                 #endregion
-                
+
                 #region 2.yol
                 // case EntityState.Added:
                 //     AddBehavior(eventData.Context, auditEntity);
@@ -52,9 +55,13 @@ public class AuditDbContextInterceptor : SaveChangesInterceptor
                 //     break;
                 #endregion
             }
+            */
 
+            #endregion
+            
             #region 3.yol
 
+            if(entityEntry.State is not (EntityState.Added or EntityState.Modified)) continue;
             Behaviors[entityEntry.State](eventData.Context, auditEntity);
 
             #endregion

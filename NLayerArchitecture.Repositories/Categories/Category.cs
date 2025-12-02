@@ -3,10 +3,9 @@ using NLayerArchitecture.Repositories.Products;
 
 namespace NLayerArchitecture.Repositories.Categories;
 
-public class Category:IAuditEntity
+public class Category : BaseEntity<Guid>, IAuditEntity
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     public ICollection<Product>? Products { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? UpdatedDate { get; set; }

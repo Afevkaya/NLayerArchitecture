@@ -6,7 +6,6 @@ public class UpdateCategoryRequestValidator: AbstractValidator<UpdateCategoryReq
 {
     public UpdateCategoryRequestValidator()
     {
-        RuleFor(c=>c.Id).NotEmpty().WithMessage("Kategori Id zorunludur");
         RuleFor(c=>c.Name).NotEmpty().WithMessage("Kategori Adı zorunludur")
             .MaximumLength(50).WithMessage("Kategori Adı en fazla 50 karakter olabilir");
     }

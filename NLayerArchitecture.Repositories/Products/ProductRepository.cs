@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NLayerArchitecture.Repositories.Products;
 
-public class ProductRepository(NLayerArchitectureDbContext dbContext) : GenericRepository<Product>(dbContext), IProductRepository
+public class ProductRepository(NLayerArchitectureDbContext dbContext) : GenericRepository<Product,Guid>(dbContext), IProductRepository
 {
     public Task<List<Product>> GetTopPriceProductAsync(int count)
     {

@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using NLayerArchitecture.Repositories.Categories;
+using NLayerArchitecture.Repositories.Products;
 using NLayerArchitecture.Services.Categories;
 using NLayerArchitecture.Services.Categories.Create;
 using NLayerArchitecture.Services.Categories.Update;
+using NLayerArchitecture.Services.Filters;
 
 namespace NLayerArchitecture.API.Controllers;
 
@@ -22,9 +25,11 @@ public class CategoriesController(ICategoryService categoryService): CustomBaseC
     [HttpPost]
     public async Task<IActionResult> AddAsync(CreateCategoryRequest request) => CreateActionResult(await categoryService.AddAsync(request));
     
-    [HttpPut]
-    public async Task<IActionResult> UpdateAsync(UpdateCategoryRequest request) => CreateActionResult(await categoryService.UpdateAsync(request));
+    [ServiceFilter(typeof(NotFoundFilter<Category, Guid>))]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateAsync(Guid id,UpdateCategoryRequest request) => CreateActionResult(await categoryService.UpdateAsync(id, request));
     
+    [ServiceFilter(typeof(NotFoundFilter<Category, Guid>))]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteAsync(Guid id) => CreateActionResult(await categoryService.DeleteAsync(id));
 }

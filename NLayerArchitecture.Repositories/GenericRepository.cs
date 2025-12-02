@@ -1,13 +1,16 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using NLayerArchitecture.Repositories.Base;
 
 namespace NLayerArchitecture.Repositories;
 
-public class GenericRepository<T>(NLayerArchitectureDbContext dbContext) : IGenericRepository<T> where T : class
+public class GenericRepository<T,TId>(NLayerArchitectureDbContext dbContext) : IGenericRepository<T, TId> 
+    where T : BaseEntity<TId> where TId : struct
 {
     protected readonly NLayerArchitectureDbContext _dbContext = dbContext;
     private readonly DbSet<T> _dbSet = dbContext.Set<T>();
     
+    public Task<bool> AnyAsync(TId id) => _dbSet.AnyAsync(x=>x.Id!.Equals(id));
     public IQueryable<T> GetAll() => _dbSet.AsQueryable().AsNoTracking();
 
     public IQueryable<T> Where(Expression<Func<T, bool>> expression) => _dbSet.Where(expression).AsNoTracking();
